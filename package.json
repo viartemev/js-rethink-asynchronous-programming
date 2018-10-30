@@ -1,0 +1,19 @@
+{
+  "name": "rethink-asynchronous-programming",
+  "version": "1.0.0",
+  "description": "",
+  "main": "callbacks.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viartemev/js-rethink-asynchronous-programming.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/viartemev/js-rethink-asynchronous-programming/issues"
+  },
+  "homepage": "https://github.com/viartemev/js-rethink-asynchronous-programming#readme",
+  "dependencies": {
+    "js-csp": "^1.0.1"
+  }
+}
