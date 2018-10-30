@@ -1,20 +1,43 @@
-const csp = require('js-csp');
+const csp = require('js-csp'),
+    go = csp.go, chan = csp.chan,
+    put = csp.put, take = csp.take,
+    timeout = csp.timeout;
 
+function fakeHttpCall(url) {
+    const fake_responses = {
+        'file1': 'The first text',
+        'file2': 'The middle text',
+        'file3': 'The last text'
+    };
 
-function* process1(channel) {
-    yield csp.put(channel, 'Hello');
-    const msg = yield csp.take(channel);
-    console.log(msg);
+    const min = 1000;
+    const max = 5000;
+    const delay = Math.floor(Math.random() * (max - min + 1) + min);
+    console.log(`Requesting: ${url} with timeout ${delay}`);
+
+    return function* () {
+        yield timeout(delay);
+        return fake_responses[url];
+    };
 }
 
-function* process2(channel) {
-    const msg = yield csp.take(channel);
-    yield csp.put(channel, (msg + ' World'));
-    console.log('Done!');
+function* execute() {
+    const ch = chan();
+    const fakeCalls = ['file1', 'file2', 'file3'].map((file) => fakeHttpCall(file));
+
+    for (let fakeCall of fakeCalls) {
+        go(function* () {
+            yield put(ch, (yield* fakeCall()));
+        });
+    }
+
+    for (let i = 0; i < fakeCalls.length; i++) {
+        const result = yield take(ch);
+        console.log(result);
+    }
 }
 
-csp.go(function* () {
-    const ch = csp.chan();
-    csp.go(process1, [ch]);
-    csp.go(process2, [ch]);
+go(function* () {
+    yield* execute();
+    console.log('Completed!');
 });

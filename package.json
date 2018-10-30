@@ -2,7 +2,7 @@
   "name": "rethink-asynchronous-programming",
   "version": "1.0.0",
   "description": "",
-  "main": "callbacks.js",
+  "main": "src/callbacks.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/viartemev/js-rethink-asynchronous-programming.git"
